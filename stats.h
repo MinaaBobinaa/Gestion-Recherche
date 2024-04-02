@@ -12,13 +12,13 @@
 #define MAX_CATEGORY_NAME 50
 
 typedef struct {
-    char nom[MAX_CATEGORY_NAME];
-    int compteur;
+   char nom[MAX_CATEGORY_NAME];
+   int compteur;
 } Categorie;
 
 typedef struct {
-    char nomRecette[MAX_LONGUEUR_LIGNE];
-    int longueur;
+   char nomRecette[MAX_LONGUEUR_LIGNE];
+   int longueur;
 } RecetteLongue;
 
 FILE* ouvrirFichier(const char* nomFichier, const char* mode);
