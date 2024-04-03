@@ -6,7 +6,7 @@
 #include "stats.h" 
 
 void test_ouvrirFichier(void) {
-   FILE* f = ouvrirFichier("liste.txt", "r");
+   FILE* f = ouvrirFichier("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL(f);
    if (f != NULL) fclose(f);
 
@@ -15,7 +15,7 @@ void test_ouvrirFichier(void) {
 }
 
 void test_nombreDeLignes(void) {
-   FILE* f = ouvrirFichier("liste.txt", "r");
+   FILE* f = ouvrirFichier("tests/test.txt", "r");
    if (f != NULL) {
      int lignes = nombreDeLignes(f);
      CU_ASSERT(lignes > 0);
@@ -61,7 +61,7 @@ void test_nombreDeMotsSansDoublons(void) {
    int resultat;
 
    // Test avec le premier fichier
-   fichier = fopen("liste.txt", "r");
+   fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
    resultat = nombreDeMotsSansDoublons(fichier);
    CU_ASSERT_EQUAL(resultat, 22); // Remplacez 22 par le nombre attendu de mots uniques pour ce fichier
@@ -73,7 +73,7 @@ void test_nombreDeMotsAvecDoublons(void) {
    FILE *fichier;
    int resultat;
 
-   fichier = fopen("liste.txt", "r");
+   fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
    resultat = nombreDeMotsAvecDoublons(fichier);
    CU_ASSERT_EQUAL(resultat, 29); // Remplacez 29 par le nombre réel de mots dans le fichier
@@ -114,7 +114,7 @@ void test_trouverLettreLaPlusFrequente(void) {
 }
 
 void test_lettreLaPlusFrequenteSansDoublons(void) {
-   FILE *fichier = fopen("liste.txt", "r");
+   FILE *fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
 
    char resultat = lettreLaPlusFrequenteSansDoublons(fichier);
@@ -132,7 +132,7 @@ void test_estCategoriePresente(void) {
 }
 
 void test_compterCategoriesUniques(void) {
-   FILE *fichier = fopen("liste.txt", "r");
+   FILE *fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
 
    int resultat = compterCategoriesUniques(fichier);
@@ -146,7 +146,7 @@ void test_compterRecettes(void) {
    FILE *fichier;
    int resultat;
 
-   fichier = fopen("liste.txt", "r");
+   fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
    resultat = compterRecettes(fichier);
    fclose(fichier);
@@ -175,7 +175,7 @@ void test_incrementerOuAjouterCategorie(void) {
 }
 
 void test_lireLigneEtExtraireCategories(void) {
-   FILE* fichier = fopen("liste.txt", "r");
+   FILE* fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
 
    Categorie categories[10];
@@ -195,7 +195,7 @@ void test_determinerCategorieLaPlusFrequente(void) {
 }
 
 void test_trouverCategorieLaPlusFrequente(void) {
-   FILE* fichier = fopen("liste.txt", "r");
+   FILE* fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
 
    char* categorieLaPlusFrequente = trouverCategorieLaPlusFrequente(fichier);
@@ -206,7 +206,7 @@ void test_trouverCategorieLaPlusFrequente(void) {
 }
 
 void test_trouverRecetteLaPlusLongue(void) {
-   FILE* fichier = fopen("liste.txt", "r");
+   FILE* fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
 
    RecetteLongue recetteLaPlusLongue = trouverRecetteLaPlusLongue(fichier);
