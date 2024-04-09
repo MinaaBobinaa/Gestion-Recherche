@@ -13,8 +13,25 @@ int main(int argc, char* argv[]) {
     }
     
     calculerEtEcrireStatistiques(argv[1], argv[3]);
+
+    const char* cheminFichier = "liste.txt";
+    CategorieNode* teteCategorie = NULL;
+
+    chargerEtOrganiserRecettes(cheminFichier, &teteCategorie);
+
+    const char* nomFichierSortie = "resultat_recettes.txt";
+    afficherCategoriesEtRecettesDansFichier(teteCategorie, nomFichierSortie);
+    libererCategoriesEtRecettes(&teteCategorie);
+
+     Recette recettes[100]; // Tableau pour stocker jusqu'à 100 recettes
+    int nbRecettes = 0;
     
-    return 0;
+    chargerRecettes(recettes, &nbRecettes); // Chargement des recettes depuis un fichier
+    rechercherRecettes(recettes, nbRecettes); // Boucle de recherche des recettes
+    
+
+  
 
     return 0;
 }
+
