@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "CUnit/Basic.h"
 #include "stats.h" 
+#include "liste_chainee.h"
 
 void test_ouvrirFichier(void) {
    FILE* f = ouvrirFichier("tests/test.txt", "r");
@@ -17,9 +18,9 @@ void test_ouvrirFichier(void) {
 void test_nombreDeLignes(void) {
    FILE* f = ouvrirFichier("tests/test.txt", "r");
    if (f != NULL) {
-     int lignes = nombreDeLignes(f);
-     CU_ASSERT(lignes > 0);
-     fclose(f);
+   int lignes = nombreDeLignes(f);
+   CU_ASSERT(lignes > 0);
+   fclose(f);
    }
 }
 
@@ -30,7 +31,6 @@ void test_estDansLeTableau(void) {
    CU_ASSERT_TRUE(estDansLeTableau("chat", tableau, taille));
    CU_ASSERT_FALSE(estDansLeTableau("poisson", tableau, taille));
 }
-
 
 void test_ajouterMotSiUnique(void) {
    char motsUniques[TAILLE_TABLEAU][MAX_LONGUEUR_MOT] = {"chat"};
@@ -60,11 +60,10 @@ void test_nombreDeMotsSansDoublons(void) {
    FILE *fichier;
    int resultat;
 
-   // Test avec le premier fichier
    fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
    resultat = nombreDeMotsSansDoublons(fichier);
-   CU_ASSERT_EQUAL(resultat, 22); // Remplacez 22 par le nombre attendu de mots uniques pour ce fichier
+   CU_ASSERT_EQUAL(resultat, 22); 
    fclose(fichier);
 
 }
@@ -76,7 +75,7 @@ void test_nombreDeMotsAvecDoublons(void) {
    fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
    resultat = nombreDeMotsAvecDoublons(fichier);
-   CU_ASSERT_EQUAL(resultat, 29); // Remplacez 29 par le nombre réel de mots dans le fichier
+   CU_ASSERT_EQUAL(resultat, 29);
    fclose(fichier);
 }
 
@@ -141,7 +140,6 @@ void test_compterCategoriesUniques(void) {
    CU_ASSERT_EQUAL(resultat, 8);
 }
 
-
 void test_compterRecettes(void) {
    FILE *fichier;
    int resultat;
@@ -168,10 +166,9 @@ void test_incrementerOuAjouterCategorie(void) {
    CU_ASSERT_EQUAL(nbCategories, 1);
    CU_ASSERT_STRING_EQUAL(categories[0].nom, "test");
    CU_ASSERT_EQUAL(categories[0].compteur, 1);
-
    incrementerOuAjouterCategorie(categories, &nbCategories, "test");
-   CU_ASSERT_EQUAL(nbCategories, 1); // Le nombre de catégories ne devrait pas augmenter
-   CU_ASSERT_EQUAL(categories[0].compteur, 2); // Le compteur de la catégorie "test" devrait augmenter
+   CU_ASSERT_EQUAL(nbCategories, 1); 
+   CU_ASSERT_EQUAL(categories[0].compteur, 2);
 }
 
 void test_lireLigneEtExtraireCategories(void) {
@@ -197,10 +194,8 @@ void test_determinerCategorieLaPlusFrequente(void) {
 void test_trouverCategorieLaPlusFrequente(void) {
    FILE* fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
-
    char* categorieLaPlusFrequente = trouverCategorieLaPlusFrequente(fichier);
    CU_ASSERT_STRING_EQUAL(categorieLaPlusFrequente, "poulet");
-
    free(categorieLaPlusFrequente);
    fclose(fichier);
 }
@@ -208,14 +203,203 @@ void test_trouverCategorieLaPlusFrequente(void) {
 void test_trouverRecetteLaPlusLongue(void) {
    FILE* fichier = fopen("tests/test.txt", "r");
    CU_ASSERT_PTR_NOT_NULL_FATAL(fichier);
-
    RecetteLongue recetteLaPlusLongue = trouverRecetteLaPlusLongue(fichier);
    fclose(fichier);
-
    CU_ASSERT_STRING_EQUAL(recetteLaPlusLongue.nomRecette, "Authentique gibelotte des iles de Sorel ");
 }
 
-//===================================================================================================
+void test_trim_basic() {
+   char testStr1[] = "  Hello World  ";
+   trim(testStr1);
+   CU_ASSERT_STRING_EQUAL(testStr1, "Hello World");
+}
+
+void test_trim_no_spaces() {
+   char testStr2[] = "NoSpaces";
+   trim(testStr2);
+   CU_ASSERT_STRING_EQUAL(testStr2, "NoSpaces");
+}
+
+void test_trim_all_spaces() {
+   char testStr3[] = "   ";
+   trim(testStr3);
+   CU_ASSERT_STRING_EQUAL(testStr3, "");
+}
+
+void test_trim_empty_string() {
+   char testStr4[] = "";
+   trim(testStr4);
+   CU_ASSERT_STRING_EQUAL(testStr4, "");
+}
+
+void test_add_recipe_to_new_category() {
+   CategorieNode* teteCategorie = NULL;
+   ajouterRecetteACategorie(&teteCategorie, "Desserts", "Tarte aux pommes");
+   CU_ASSERT_PTR_NOT_NULL_FATAL(teteCategorie);
+   libererCategoriesEtRecettes(&teteCategorie);
+}
+
+void test_add_multiple_recipes_to_same_category() {
+   CategorieNode* teteCategorie = NULL;
+   ajouterRecetteACategorie(&teteCategorie, "Desserts", "Tarte aux pommes");
+   ajouterRecetteACategorie(&teteCategorie, "Desserts", "Cheesecake");
+   CU_ASSERT_PTR_NOT_NULL_FATAL(teteCategorie->recettes->suivant);
+   libererCategoriesEtRecettes(&teteCategorie);
+}
+
+void test_add_recipe_to_different_categories() {
+   CategorieNode* teteCategorie = NULL;
+   ajouterRecetteACategorie(&teteCategorie, "Desserts", "Tarte aux pommes");
+   ajouterRecetteACategorie(&teteCategorie, "Entrees", "Salade César");
+   CU_ASSERT_PTR_NOT_NULL_FATAL(teteCategorie->suivant);
+   libererCategoriesEtRecettes(&teteCategorie);
+}
+
+void test_enMinuscules() {
+   char testStr[] = "TeSt StRiNg";
+   enMinuscules(testStr);
+   CU_ASSERT_STRING_EQUAL(testStr, "test string");
+}
+
+void test_chargerEtOrganiserRecettes(void) {
+   CategorieNode* teteCategorie = NULL;
+   chargerEtOrganiserRecettes("liste.txt", &teteCategorie);
+
+   CU_ASSERT_PTR_NOT_NULL_FATAL(teteCategorie);
+   
+   CategorieNode* current = teteCategorie;
+   int foundPoulet = 0, foundDessert = 0; 
+   int countPoulet = 0, countDessert = 0;
+
+   while (current != NULL) {
+   if (strcmp(current->nomCategorie, "poulet") == 0) {
+     foundPoulet = 1;
+     RecetteNode* recette = current->recettes;
+     while (recette != NULL) {
+      countPoulet++;
+      recette = recette->suivant;
+     }
+   } else if (strcmp(current->nomCategorie, "dessert") == 0) {
+     foundDessert = 1;
+     RecetteNode* recette = current->recettes;
+     while (recette != NULL) {
+      countDessert++;
+      recette = recette->suivant;
+     }
+   } 
+   current = current->suivant;
+   }
+
+   CU_ASSERT_TRUE(foundPoulet);
+   CU_ASSERT_TRUE(foundDessert);
+   CU_ASSERT_EQUAL(countPoulet, 4);
+   CU_ASSERT_EQUAL(countDessert, 2); 
+   
+}
+
+void test_trierRecettesParInsertion(void) {
+   RecetteNode* tete = (RecetteNode*)malloc(sizeof(RecetteNode));
+   strcpy(tete->nomRecette, "Gâteau au chocolat");
+   tete->suivant = (RecetteNode*)malloc(sizeof(RecetteNode));
+   strcpy(tete->suivant->nomRecette, "Tarte aux pommes");
+   tete->suivant->suivant = (RecetteNode*)malloc(sizeof(RecetteNode));
+   strcpy(tete->suivant->suivant->nomRecette, "Crème brûlée");
+   tete->suivant->suivant->suivant = NULL;
+   trierRecettesParInsertion(&tete);
+   CU_ASSERT_STRING_EQUAL(tete->nomRecette, "Crème brûlée");
+   CU_ASSERT_STRING_EQUAL(tete->suivant->nomRecette, "Gâteau au chocolat");
+   CU_ASSERT_STRING_EQUAL(tete->suivant->suivant->nomRecette, "Tarte aux pommes");
+
+   RecetteNode* current = tete;
+   while (current != NULL) {
+   RecetteNode* temp = current;
+   current = current->suivant;
+   free(temp);
+   }
+}
+
+void test_afficherCategoriesEtRecettesDansFichier(void) {
+   CategorieNode* teteCategorie = NULL;
+   ajouterRecetteACategorie(&teteCategorie, "dessert", "Gâteau au chocolat");
+
+   const char* nomFichierTest = "test_categories_et_recettes.txt";
+   afficherCategoriesEtRecettesDansFichier(teteCategorie, nomFichierTest);
+   FILE* fichierTest = fopen(nomFichierTest, "r");
+   CU_ASSERT_PTR_NOT_NULL_FATAL(fichierTest);
+
+   char buffer[256];
+   CU_ASSERT_PTR_NOT_NULL_FATAL(fgets(buffer, sizeof(buffer), fichierTest)); 
+   CU_ASSERT_TRUE(strcmp(buffer, "{dessert}\n") == 0);
+   CU_ASSERT_PTR_NOT_NULL_FATAL(fgets(buffer, sizeof(buffer), fichierTest));
+   CU_ASSERT_TRUE(strcmp(buffer, "Gâteau au chocolat\n") == 0);
+
+   CU_ASSERT_PTR_NOT_NULL_FATAL(fgets(buffer, sizeof(buffer), fichierTest));
+
+   fclose(fichierTest);
+   remove(nomFichierTest); 
+   libererCategoriesEtRecettes(&teteCategorie); 
+}
+
+void test_chargerRecettes(void) {
+   Recette recettes[100];
+   int nbRecettes = 0;
+   chargerRecettes(recettes, &nbRecettes);
+
+   CU_ASSERT_TRUE(nbRecettes > 0);
+   CU_ASSERT_STRING_EQUAL(recettes[0].categorie, "poulet");
+
+}
+
+void test_afficherRecettesCategorie(void) {
+   Recette recettes[5] = {
+     {"Gâteau au chocolat", "Dessert"},
+     {"Salade César", "Salade"},
+     {"Tarte aux pommes", "Dessert"},
+     {"Poulet Basquaise", "Plat principal"},
+     {"Quiche Lorraine", "Plat principal"}
+   };
+   int nbRecettes = 5;
+
+   freopen("test_output.txt", "w", stdout);
+   afficherRecettesCategorie(recettes, nbRecettes, "dessert", "pommes");
+   fclose(stdout);
+   stdout = fopen("/dev/tty", "w");
+
+   
+   FILE *f = fopen("test_output.txt", "r");
+   CU_ASSERT_PTR_NOT_NULL_FATAL(f);
+
+   fclose(f);
+
+   remove("test_output.txt");
+}
+
+void test_verifierCategorie(void) {
+   Recette recettes[3] = {
+      {"Gâteau au chocolat", "Dessert"},
+      {"Salade César", "Salade"},
+      {"Tarte aux pommes", "Dessert"}
+   };
+   int nbRecettes = 3;
+
+   int resultInexistante = verifierCategorie(recettes, nbRecettes, "Petit déjeuner");
+   CU_ASSERT_EQUAL(resultInexistante, 0);
+}
+
+void test_extraireMots(void) {
+   char chaine[] = "gâteau au chocolat";
+   char mots[3][MAX_CAT_NOM];
+   int nbMots;
+
+   nbMots = extraireMots(chaine, mots);
+
+   CU_ASSERT_EQUAL(nbMots, 3);
+   CU_ASSERT_STRING_EQUAL(mots[0], "gâteau");
+   CU_ASSERT_STRING_EQUAL(mots[1], "au");
+   CU_ASSERT_STRING_EQUAL(mots[2], "chocolat");
+}
+
+
 int main() {
    
    CU_initialize_registry();
@@ -262,6 +446,27 @@ int main() {
    CU_pSuite suite11 = CU_add_suite("Suite_de_test_pour_recette_plus_longue", NULL, NULL);
    CU_add_test(suite11, "test trouver recette plus frequente", test_trouverRecetteLaPlusLongue);
 
+
+
+   CU_pSuite suite12 = CU_add_suite("Suite de test pour trim et ajout recette", NULL, NULL);
+   CU_add_test(suite12, "test trim with basic input", test_trim_basic);
+   CU_add_test(suite12, "test trim with no spaces", test_trim_no_spaces);
+   CU_add_test(suite12, "test trim with all spaces", test_trim_all_spaces);
+   CU_add_test(suite12, "test trim with empty string", test_trim_empty_string);
+   CU_add_test(suite12, "test adding recipe to new category", test_add_recipe_to_new_category);
+   CU_add_test(suite12, "test adding multiple recipes to same category", test_add_multiple_recipes_to_same_category);
+   CU_add_test(suite12, "test adding recipe to different categories", test_add_recipe_to_different_categories);
+
+
+   CU_pSuite suite13 = CU_add_suite("Suite13", NULL, NULL);
+   CU_add_test(suite13, "test of enMinuscules()", test_enMinuscules);
+   CU_add_test(suite13, "test of chargerEtOrganiserRecettes()", test_chargerEtOrganiserRecettes);
+   CU_add_test(suite13, "test of trierRecettesParInsertion()", test_trierRecettesParInsertion);
+   CU_add_test(suite13, "test of test_afficherCategoriesEtRecettesDansFichier()", test_afficherCategoriesEtRecettesDansFichier);
+   CU_add_test(suite13, "test of test_chargerRecettes()", test_chargerRecettes);
+   CU_add_test(suite13, "test of test_afficherRecettesCategorie()", test_afficherRecettesCategorie);
+   CU_add_test(suite13, "test of test_verifierCategorie()", test_verifierCategorie);
+   CU_add_test(suite13, "test of test_extraireMots()", test_extraireMots);
 
    CU_basic_set_mode(CU_BRM_VERBOSE);
    CU_basic_run_tests();
