@@ -79,26 +79,20 @@ int nombreDeMotsSansDoublons(FILE* fichier) {
 //===========================================================================================
 
 int nombreDeMotsAvecDoublons(FILE* fichier) {
-   char mot[MAX_LONGUEUR_MOT];
    int totalMots = 0;
    char ch;
-   int index = 0; 
+   int index = 0;
    rewind(fichier);
 
    while ((ch = fgetc(fichier)) != EOF) {
       if (isalpha(ch)) {
-         if (index < MAX_LONGUEUR_MOT - 1) {
-            mot[index++] = ch;
+         if (index == 0) {
+            totalMots++;
+            index = 1;
          }
-      } else if (index > 0) { 
-         mot[index] = '\0';
+      } else {
          index = 0;
-         totalMots++;
       }
-   }
-
-   if (index > 0) {
-      totalMots++;
    }
 
    return totalMots;
@@ -301,7 +295,7 @@ RecetteLongue trouverRecetteLaPlusLongue(FILE* fichier) {
 
    while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
       char* posCrochete = strchr(ligne, '[');
-      int longueurNom = (posCrochete != NULL) ? (int)(posCrochete - ligne) : strlen(ligne);
+      int longueurNom = (posCrochete != NULL) ? (int)(posCrochete - ligne) : (int)strlen(ligne);
 
       if (ligne[longueurNom - 1] == '\n') {
          longueurNom--;
