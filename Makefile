@@ -1,10 +1,20 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99
+OBJECTS= main.c liste_chainee.c stats.c
+EXEC= recherche 
+STATFILE= *.gcov *.gcda *.gcno stats.txt
+
+all: build cunits clean 
+
+# Build
+# -----
 build:
-	gcc -o exec main.c liste_chainee.c stats.c
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJECTS)
 
 # CUnit
 # ----
 cunits:
-	gcc -o test test.c liste_chainee.c stats.c -lcunit -fprofile-arcs -ftest-coverage
+	$(CC) -o test test.c liste_chainee.c stats.c -lcunit -fprofile-arcs -ftest-coverage
 	./test
 	gcov test-stats.gcno
 	gcov test-liste_chainee.gcno
@@ -13,4 +23,7 @@ cunits:
 # ----
 
 clean:
-	rm -f test *.gcov *.gcda *.gcno
+	rm -f test $(EXEC) $(STATFILE)
+
+
+.PHONY: clean build cunits start
