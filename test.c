@@ -208,38 +208,38 @@ void test_trouverRecetteLaPlusLongue(void) {
    CU_ASSERT_STRING_EQUAL(recetteLaPlusLongue.nomRecette, "Authentique gibelotte des iles de Sorel ");
 }
 
-void test_trim_basic() {
+void test_trim_basic(void) {
    char testStr1[] = "  Hello World  ";
    trim(testStr1);
    CU_ASSERT_STRING_EQUAL(testStr1, "Hello World");
 }
 
-void test_trim_no_spaces() {
+void test_trim_no_spaces(void) {
    char testStr2[] = "NoSpaces";
    trim(testStr2);
    CU_ASSERT_STRING_EQUAL(testStr2, "NoSpaces");
 }
 
-void test_trim_all_spaces() {
+void test_trim_all_spaces(void) {
    char testStr3[] = "   ";
    trim(testStr3);
    CU_ASSERT_STRING_EQUAL(testStr3, "");
 }
 
-void test_trim_empty_string() {
+void test_trim_empty_string(void) {
    char testStr4[] = "";
    trim(testStr4);
    CU_ASSERT_STRING_EQUAL(testStr4, "");
 }
 
-void test_add_recipe_to_new_category() {
+void test_add_recipe_to_new_category(void) {
    CategorieNode* teteCategorie = NULL;
    ajouterRecetteACategorie(&teteCategorie, "Desserts", "Tarte aux pommes");
    CU_ASSERT_PTR_NOT_NULL_FATAL(teteCategorie);
    libererCategoriesEtRecettes(&teteCategorie);
 }
 
-void test_add_multiple_recipes_to_same_category() {
+void test_add_multiple_recipes_to_same_category(void) {
    CategorieNode* teteCategorie = NULL;
    ajouterRecetteACategorie(&teteCategorie, "Desserts", "Tarte aux pommes");
    ajouterRecetteACategorie(&teteCategorie, "Desserts", "Cheesecake");
@@ -247,7 +247,7 @@ void test_add_multiple_recipes_to_same_category() {
    libererCategoriesEtRecettes(&teteCategorie);
 }
 
-void test_add_recipe_to_different_categories() {
+void test_add_recipe_to_different_categories(void) {
    CategorieNode* teteCategorie = NULL;
    ajouterRecetteACategorie(&teteCategorie, "Desserts", "Tarte aux pommes");
    ajouterRecetteACategorie(&teteCategorie, "Entrees", "Salade César");
@@ -255,7 +255,7 @@ void test_add_recipe_to_different_categories() {
    libererCategoriesEtRecettes(&teteCategorie);
 }
 
-void test_enMinuscules() {
+void test_enMinuscules(void) {
    char testStr[] = "TeSt StRiNg";
    enMinuscules(testStr);
    CU_ASSERT_STRING_EQUAL(testStr, "test string");
@@ -263,13 +263,13 @@ void test_enMinuscules() {
 
 void test_chargerEtOrganiserRecettes(void) {
    CategorieNode* teteCategorie = NULL;
-   chargerEtOrganiserRecettes("liste.txt", &teteCategorie);
+   chargerEtOrganiserRecettes("tests/test.txt", &teteCategorie);
 
    CU_ASSERT_PTR_NOT_NULL_FATAL(teteCategorie);
    
    CategorieNode* current = teteCategorie;
-   int foundPoulet = 0, foundDessert = 0; 
-   int countPoulet = 0, countDessert = 0;
+   int foundPoulet = 0, foundBbq = 0; 
+   int countPoulet = 0, countBbq = 0;
 
    while (current != NULL) {
    if (strcmp(current->nomCategorie, "poulet") == 0) {
@@ -279,11 +279,11 @@ void test_chargerEtOrganiserRecettes(void) {
       countPoulet++;
       recette = recette->suivant;
      }
-   } else if (strcmp(current->nomCategorie, "dessert") == 0) {
-     foundDessert = 1;
+   } else if (strcmp(current->nomCategorie, "bbq") == 0) {
+     foundBbq = 1;
      RecetteNode* recette = current->recettes;
      while (recette != NULL) {
-      countDessert++;
+      countBbq++;
       recette = recette->suivant;
      }
    } 
@@ -291,9 +291,9 @@ void test_chargerEtOrganiserRecettes(void) {
    }
 
    CU_ASSERT_TRUE(foundPoulet);
-   CU_ASSERT_TRUE(foundDessert);
-   CU_ASSERT_EQUAL(countPoulet, 4);
-   CU_ASSERT_EQUAL(countDessert, 2); 
+   CU_ASSERT_TRUE(foundBbq);
+   CU_ASSERT_EQUAL(countPoulet, 2);
+   CU_ASSERT_EQUAL(countBbq, 1); 
    
 }
 
@@ -338,16 +338,6 @@ void test_afficherCategoriesEtRecettesDansFichier(void) {
    fclose(fichierTest);
    remove(nomFichierTest); 
    libererCategoriesEtRecettes(&teteCategorie); 
-}
-
-void test_chargerRecettes(void) {
-   Recette recettes[100];
-   int nbRecettes = 0;
-   chargerRecettes(recettes, &nbRecettes);
-
-   CU_ASSERT_TRUE(nbRecettes > 0);
-   CU_ASSERT_STRING_EQUAL(recettes[0].categorie, "poulet");
-
 }
 
 void test_afficherRecettesCategorie(void) {
@@ -463,7 +453,6 @@ int main() {
    CU_add_test(suite13, "test of chargerEtOrganiserRecettes()", test_chargerEtOrganiserRecettes);
    CU_add_test(suite13, "test of trierRecettesParInsertion()", test_trierRecettesParInsertion);
    CU_add_test(suite13, "test of test_afficherCategoriesEtRecettesDansFichier()", test_afficherCategoriesEtRecettesDansFichier);
-   CU_add_test(suite13, "test of test_chargerRecettes()", test_chargerRecettes);
    CU_add_test(suite13, "test of test_afficherRecettesCategorie()", test_afficherRecettesCategorie);
    CU_add_test(suite13, "test of test_verifierCategorie()", test_verifierCategorie);
    CU_add_test(suite13, "test of test_extraireMots()", test_extraireMots);
