@@ -5,33 +5,35 @@
 #include "stats.h" 
 
 
-
 int main(int argc, char* argv[]) {
-     if(argc < 4 || strcmp(argv[2], "-S") != 0) {
-        printf("Usage: %s <fichier_recettes> -S <fichier_statistiques>\n", argv[0]);
-        return 1;
-    }
-    
-    calculerEtEcrireStatistiques(argv[1], argv[3]);
+   if (argc < 2) {
+      printf("Usage: %s <fichier_recettes> [-S <fichier_statistiques>]\n", argv[0]);
+      return 1;
+   }
 
-    const char* cheminFichier = "liste.txt";
-    CategorieNode* teteCategorie = NULL;
+   const char* cheminFichier = argv[1];
+   CategorieNode* teteCategorie = NULL;
 
-    chargerEtOrganiserRecettes(cheminFichier, &teteCategorie);
+   chargerEtOrganiserRecettes(cheminFichier, &teteCategorie);
 
-    const char* nomFichierSortie = "resultat_recettes.txt";
-    afficherCategoriesEtRecettesDansFichier(teteCategorie, nomFichierSortie);
-    libererCategoriesEtRecettes(&teteCategorie);
+   if (argc == 4 && strcmp(argv[2], "-S") == 0) {
+      calculerEtEcrireStatistiques(argv[1], argv[3]);
+   } else if (argc > 2) {
+      printf("Usage: %s <fichier_recettes> [-S <fichier_statistiques>]\n", argv[0]);
+      libererCategoriesEtRecettes(&teteCategorie);
+      return 1;
+   }
 
-     Recette recettes[100]; // Tableau pour stocker jusqu'à 100 recettes
-    int nbRecettes = 0;
-    
-    chargerRecettes(recettes, &nbRecettes); // Chargement des recettes depuis un fichier
-    rechercherRecettes(recettes, nbRecettes); // Boucle de recherche des recettes
-    
+   const char* nomFichierSortie = "resultat_recettes.txt";
+   afficherCategoriesEtRecettesDansFichier(teteCategorie, nomFichierSortie);
+   libererCategoriesEtRecettes(&teteCategorie);
 
-  
+   Recette recettes[100];
+   int nbRecettes = 0;
 
-    return 0;
+   chargerRecettes(recettes, &nbRecettes);
+   rechercherRecettes(recettes, nbRecettes);
+
+   return 0;
 }
 
