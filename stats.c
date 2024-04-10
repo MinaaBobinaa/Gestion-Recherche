@@ -29,14 +29,14 @@ int nombreDeLignes(FILE* fichier) {
 
    return lignes;
 }
-//===========================================================================================
+
 int estDansLeTableau(char mot[], char tableau[][MAX_LONGUEUR_MOT], int taille) {
    for (int i = 0; i < taille; i++) {
       if (strcmp(mot, tableau[i]) == 0) {
-         return 1; // Vrai, le mot est déjà dans le tableau
+         return 1; 
       }
    }
-   return 0; // Faux, le mot n'est pas dans le tableau
+   return 0;
 }
 
 void ajouterMotSiUnique(char mot[], char motsUniques[][MAX_LONGUEUR_MOT], int *nombreMotsUniques) {
@@ -47,10 +47,10 @@ void ajouterMotSiUnique(char mot[], char motsUniques[][MAX_LONGUEUR_MOT], int *n
 }
 
 void traiterEtAjouterMot(char mot[], int *indexMot, char motsUniques[][MAX_LONGUEUR_MOT], int *nombreMotsUniques) {
-   if (*indexMot > 0) { // Vérifie si le mot est non vide
-      mot[*indexMot] = '\0'; // Termine la chaîne
+   if (*indexMot > 0) { 
+      mot[*indexMot] = '\0'; 
       ajouterMotSiUnique(mot, motsUniques, nombreMotsUniques);
-      *indexMot = 0; // Réinitialise l'index pour le prochain mot
+      *indexMot = 0; 
    }
 }
 
@@ -76,7 +76,6 @@ int nombreDeMotsSansDoublons(FILE* fichier) {
    traiterEtAjouterMot(mot, &indexMot, motsUniques, &nombreMotsUniques);
    return nombreMotsUniques;
 }
-//===========================================================================================
 
 int nombreDeMotsAvecDoublons(FILE* fichier) {
    int totalMots = 0;
@@ -98,10 +97,10 @@ int nombreDeMotsAvecDoublons(FILE* fichier) {
    return totalMots;
 }
 
-//===========================================================================================
+
 void initMot(char *mot, int *indexMot) {
    *indexMot = 0;
-   mot[0] = '\0'; // Assure que le mot est vide
+   mot[0] = '\0'; 
 }
 
 void traiterMot(const char *mot, int *compteurLettres) {
@@ -146,20 +145,20 @@ char lettreLaPlusFrequenteSansDoublons(FILE* fichier) {
    while ((ch = fgetc(fichier)) != EOF) {
       if (isalpha(ch) && indexMot < MAX_LONGUEUR_MOT - 1) {
          mot[indexMot++] = tolower(ch);
-         mot[indexMot] = '\0'; // Maintient le mot terminé correctement
-      } else if (indexMot > 0) { // Mot terminé
+         mot[indexMot] = '\0'; 
+      } else if (indexMot > 0) { 
          traiterMot(mot, compteurLettres);
          initMot(mot, &indexMot);
       }
    }
 
-   if (indexMot > 0) { // Dernier mot
+   if (indexMot > 0) {
       traiterMot(mot, compteurLettres);
    }
 
    return trouverLettreLaPlusFrequente(compteurLettres);
 }
-//===========================================================================================
+
 
 int estCategoriePresente(char categories[MAX_CAT][MAX_CAT_LENGTH], int nbCat, char* cat) {
    for (int i = 0; i < nbCat; i++) {
@@ -198,29 +197,25 @@ int compterCategoriesUniques(FILE* fichier) {
    return nbCat;
 }
 
-//===========================================================================================
+
 int compterRecettes(FILE* fichier) {
    int nbRecettes = 0;
-   char ligne[1024]; // Assumption: une ligne ne dépasse pas 1024 caractères
+   char ligne[1024]; 
 
-   // Assurez-vous de commencer à lire depuis le début du fichier
    rewind(fichier);
 
-   // Lire le fichier ligne par ligne
    while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
-      nbRecettes++; // Incrémenter le compteur pour chaque ligne lue
+      nbRecettes++; 
    }
 
    return nbRecettes;
 }
 
-//===========================================================================================
-
 void nettoyerToken(char* token) {
-   // Cette fonction pourrait être étendue pour effectuer un nettoyage plus approfondi si nécessaire
+
    char* dest = token;
    for ( ; *token != '\0'; ++token) {
-      if (*token != ' ') { // Copie seulement si le caractère n'est pas un espace
+      if (*token != ' ') { 
          *dest++ = *token;
       }
    }
@@ -242,17 +237,17 @@ void incrementerOuAjouterCategorie(Categorie categories[], int* nbCategories, co
 int lireLigneEtExtraireCategories(FILE* fichier, Categorie categories[], int* nbCategories) {
    char ligne[256];
    if (fgets(ligne, sizeof(ligne), fichier) == NULL) {
-      return 0; // Fin du fichier
+      return 0; 
    }
 
-   char* token = strtok(ligne, "[]\n"); // Ignorer le nom de la recette
+   char* token = strtok(ligne, "[]\n"); 
    while ((token = strtok(NULL, "[]\n")) != NULL) {
       nettoyerToken(token);
-      if (token[0] != '\0') { // Si le token n'est pas vide après nettoyage
+      if (token[0] != '\0') { 
          incrementerOuAjouterCategorie(categories, nbCategories, token);
       }
    }
-   return 1; // Ligne lue avec succès
+   return 1; 
 }
 
 char* determinerCategorieLaPlusFrequente(Categorie categories[], int nbCategories) {
@@ -272,13 +267,12 @@ char* determinerCategorieLaPlusFrequente(Categorie categories[], int nbCategorie
 
 char* trouverCategorieLaPlusFrequente(FILE* fichier) {
    rewind(fichier);
-   Categorie categories[100]; // Supposons un maximum de 100 catégories différentes
+   Categorie categories[100]; 
    int nbCategories = 0;
 
    while (lireLigneEtExtraireCategories(fichier, categories, &nbCategories)) {}
 
    char* categorieLaPlusFrequenteNom = determinerCategorieLaPlusFrequente(categories, nbCategories);
-   // Copie le nom de la catégorie la plus fréquente pour le retourner
    if (categorieLaPlusFrequenteNom != NULL) {
       char* result = (char*)malloc(strlen(categorieLaPlusFrequenteNom) + 1);
       strcpy(result, categorieLaPlusFrequenteNom);
@@ -286,7 +280,7 @@ char* trouverCategorieLaPlusFrequente(FILE* fichier) {
    }
    return NULL;
 }
-//===========================================================================================
+
 
 RecetteLongue trouverRecetteLaPlusLongue(FILE* fichier) {
    RecetteLongue recetteLaPlusLongue = {"", 0};
@@ -303,7 +297,7 @@ RecetteLongue trouverRecetteLaPlusLongue(FILE* fichier) {
 
       if (longueurNom > recetteLaPlusLongue.longueur) {
          strncpy(recetteLaPlusLongue.nomRecette, ligne, longueurNom);
-         recetteLaPlusLongue.nomRecette[longueurNom] = '\0'; // Assurez-vous que la chaîne est terminée
+         recetteLaPlusLongue.nomRecette[longueurNom] = '\0'; 
          recetteLaPlusLongue.longueur = longueurNom;
       }
    }
@@ -311,7 +305,6 @@ RecetteLongue trouverRecetteLaPlusLongue(FILE* fichier) {
    return recetteLaPlusLongue;
 }
 
-//===========================================================================================
 
 void calculerEtEcrireStatistiques(const char* fichierRecettes, const char* fichierStatistiques) {
    FILE* fichierR = ouvrirFichier(fichierRecettes, "r");
@@ -332,7 +325,7 @@ void calculerEtEcrireStatistiques(const char* fichierRecettes, const char* fichi
 
    FILE* fichierS = ouvrirFichier(fichierStatistiques, "w");
    if (fichierS == NULL) {
-      return; // Erreur d'ouverture du fichier statistiques, la gestion d'erreur affiche déjà un message
+      return;
    }
 
    fprintf(fichierS, "Le nombre de lignes dans le fichier d'entrée: %d\n", lignes);
