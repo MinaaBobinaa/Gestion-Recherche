@@ -26,4 +26,4 @@ clean:
 	rm -f test $(EXEC) $(STATFILE)
 
 
-.PHONY: clean build cunits start
+.PHONY: clean build cunits
