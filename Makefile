@@ -4,7 +4,7 @@ OBJECTS= main.c liste_chainee.c stats.c
 EXEC= recherche 
 STATFILE= *.gcov *.gcda *.gcno stats.txt
 
-all: build cunits clean 
+all: clean build cunits 
 
 # Build
 # -----
