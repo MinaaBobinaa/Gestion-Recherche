@@ -341,27 +341,30 @@ void test_afficherCategoriesEtRecettesDansFichier(void) {
 }
 
 void test_afficherRecettesCategorie(void) {
-   Recette recettes[5] = {
-     {"Gâteau au chocolat", "Dessert"},
-     {"Salade César", "Salade"},
-     {"Tarte aux pommes", "Dessert"},
-     {"Poulet Basquaise", "Plat principal"},
-     {"Quiche Lorraine", "Plat principal"}
-   };
-   int nbRecettes = 5;
+    Recette recettes[5] = {
+        {"Gâteau au chocolat", "Dessert"},
+        {"Salade César", "Salade"},
+        {"Tarte aux pommes", "Dessert"},
+        {"Poulet Basquaise", "Plat principal"},
+        {"Quiche Lorraine", "Plat principal"}
+    };
+    int nbRecettes = 5;
 
-   freopen("test_output.txt", "w", stdout);
-   afficherRecettesCategorie(recettes, nbRecettes, "dessert", "pommes");
-   fclose(stdout);
-   stdout = fopen("/dev/tty", "w");
+    FILE *tempFile = freopen("test_output.txt", "w+", stdout);
+    if (tempFile == NULL) {
+        CU_FAIL("Failed to redirect stdout to a file.");
+        return;
+    }
+    
+    afficherRecettesCategorie(recettes, nbRecettes, "dessert", "pommes");
+    fflush(stdout);
+    freopen("/dev/tty", "a", stdout);
+    tempFile = fopen("test_output.txt", "r");
+    CU_ASSERT_PTR_NOT_NULL_FATAL(tempFile);
 
    
-   FILE *f = fopen("test_output.txt", "r");
-   CU_ASSERT_PTR_NOT_NULL_FATAL(f);
-
-   fclose(f);
-
-   remove("test_output.txt");
+    fclose(tempFile);
+    remove("test_output.txt");
 }
 
 void test_verifierCategorie(void) {
