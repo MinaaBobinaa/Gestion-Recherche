@@ -273,19 +273,19 @@ void test_chargerEtOrganiserRecettes(void) {
 
    while (current != NULL) {
    if (strcmp(current->nomCategorie, "poulet") == 0) {
-     foundPoulet = 1;
-     RecetteNode* recette = current->recettes;
-     while (recette != NULL) {
-      countPoulet++;
-      recette = recette->suivant;
-     }
+    foundPoulet = 1;
+    RecetteNode* recette = current->recettes;
+    while (recette != NULL) {
+     countPoulet++;
+     recette = recette->suivant;
+    }
    } else if (strcmp(current->nomCategorie, "bbq") == 0) {
-     foundBbq = 1;
-     RecetteNode* recette = current->recettes;
-     while (recette != NULL) {
-      countBbq++;
-      recette = recette->suivant;
-     }
+    foundBbq = 1;
+    RecetteNode* recette = current->recettes;
+    while (recette != NULL) {
+     countBbq++;
+     recette = recette->suivant;
+    }
    } 
    current = current->suivant;
    }
@@ -342,33 +342,37 @@ void test_afficherCategoriesEtRecettesDansFichier(void) {
 
 void test_afficherRecettesCategorie(void) {
    Recette recettes[5] = {
-     {"Gâteau au chocolat", "Dessert"},
-     {"Salade César", "Salade"},
-     {"Tarte aux pommes", "Dessert"},
-     {"Poulet Basquaise", "Plat principal"},
-     {"Quiche Lorraine", "Plat principal"}
+      {"Gâteau au chocolat", "Dessert"},
+      {"Salade César", "Salade"},
+      {"Tarte aux pommes", "Dessert"},
+      {"Poulet Basquaise", "Plat principal"},
+      {"Quiche Lorraine", "Plat principal"}
    };
    int nbRecettes = 5;
 
-   freopen("test_output.txt", "w", stdout);
-   afficherRecettesCategorie(recettes, nbRecettes, "dessert", "pommes");
-   fclose(stdout);
-   stdout = fopen("/dev/tty", "w");
-
+   FILE *tempFile = freopen("test_output.txt", "w+", stdout);
+   if (tempFile == NULL) {
+      CU_FAIL("Failed to redirect stdout to a file.");
+      return;
+   }
    
-   FILE *f = fopen("test_output.txt", "r");
-   CU_ASSERT_PTR_NOT_NULL_FATAL(f);
+   afficherRecettesCategorie(recettes, nbRecettes, "dessert", "pommes");
+   fflush(stdout);
+   freopen("/dev/tty", "a", stdout);
+   tempFile = fopen("test_output.txt", "r");
+   CU_ASSERT_PTR_NOT_NULL_FATAL(tempFile);
 
-   fclose(f);
 
+   fclose(tempFile);
    remove("test_output.txt");
+
 }
 
 void test_verifierCategorie(void) {
    Recette recettes[3] = {
-      {"Gâteau au chocolat", "Dessert"},
-      {"Salade César", "Salade"},
-      {"Tarte aux pommes", "Dessert"}
+     {"Gâteau au chocolat", "Dessert"},
+     {"Salade César", "Salade"},
+     {"Tarte aux pommes", "Dessert"}
    };
    int nbRecettes = 3;
 
@@ -453,7 +457,7 @@ int main() {
    CU_add_test(suite13, "test of chargerEtOrganiserRecettes()", test_chargerEtOrganiserRecettes);
    CU_add_test(suite13, "test of trierRecettesParInsertion()", test_trierRecettesParInsertion);
    CU_add_test(suite13, "test of test_afficherCategoriesEtRecettesDansFichier()", test_afficherCategoriesEtRecettesDansFichier);
-   //CU_add_test(suite13, "test of test_afficherRecettesCategorie()", test_afficherRecettesCategorie);
+   CU_add_test(suite13, "test of test_afficherRecettesCategorie()", test_afficherRecettesCategorie);
    CU_add_test(suite13, "test of test_verifierCategorie()", test_verifierCategorie);
    CU_add_test(suite13, "test of test_extraireMots()", test_extraireMots);
 
