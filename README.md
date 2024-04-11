@@ -167,6 +167,10 @@ puis génère des rapports de couverture de code avec 'gcov'.
 de test, y compris l'exécutable, les fichiers de couverture 
 de code et les fichiers de statistiques.
 
+### Commande HTML
+- `make html` est utilisée pour convertir le fichier README.md en une version HTML, facilitant ainsi sa lecture dans un navigateur web. Cette opération est effectuée à l'aide de pandoc.
+
+
 ### Commande Phony
 - `.PHONY`: Déclare les cibles qui ne correspondent pas à des fichiers réels comme étant 'phony',
 évitant ainsi des conflits avec des fichiers de même nom et garantissant que les 
