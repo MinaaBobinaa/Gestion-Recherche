@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c99
 OBJECTS= main.c liste_chainee.c stats.c
 EXEC= recherche 
-STATFILE= *.gcov *.gcda *.gcno stats.txt
+STATFILE= *.gcov *.gcda *.gcno stats.txt resultat_recettes.txt
 
 all: clean build cunits 
 
