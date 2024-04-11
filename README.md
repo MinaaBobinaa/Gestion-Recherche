@@ -124,3 +124,50 @@ Recherche invalide.
 
 ```
 Vous pouvez quitter le programme en ecrivant 'q'.
+
+---
+
+Si vous avez executé le programme avec `-S stats.txt`, vous pouvez consulter
+le fichier de statistiques en ecrivant la commande suivante:
+
+```bash
+$ cat stats.txt
+```
+Votre fichier affichera différentes statistiques en fonction du déroulement
+du jeu.
+
+```text
+Le nombre de lignes dans le fichier d'entrée: 14
+Le nombre de mots sans doublons: 55
+Le nombre de mots avec doublons: 76
+La lettre la plus fréquente (sans considérer les doublons): e
+Le nombre de catégories : 19
+Le nombre de recettes: 14
+La catégorie qui a le plus grand nombre de recettes: vegetarien
+La recette la plus longue est : Ravioli aux champignons 
+```
+
+## Makefile:
+Le Makefile fourni est conçu pour faciliter la compilation, les tests et le nettoyage du
+programme recherche. Voici un aperçu de son fonctionnement et de ses commandes
+principales:
+
+### Commande Principale:
+- `make`: Executera `clean` `build` et `cunits` afin de nettoyer, compiler et executer les tests.
+
+### Commande de Build
+- `make build`: Compile le projet en créant l'exécutable du programme `recherche`
+
+### Commande de test CUnit
+- `make cunits`: Compile et exécute les tests CUnit pour le projet,
+puis génère des rapports de couverture de code avec 'gcov'.
+
+### Commande de Nettoyage
+- `make clean`: Supprime tous les fichiers générés par le processus de build et
+de test, y compris l'exécutable, les fichiers de couverture 
+de code et les fichiers de statistiques.
+
+### Commande Phony
+- `.PHONY`: Déclare les cibles qui ne correspondent pas à des fichiers réels comme étant 'phony',
+évitant ainsi des conflits avec des fichiers de même nom et garantissant que les 
+commandes sont toujours exécutées.
