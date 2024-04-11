@@ -355,10 +355,9 @@ void test_afficherRecettesCategorie(void) {
         CU_FAIL("Failed to redirect stdout to a file.");
         return;
     }
-    
+
     afficherRecettesCategorie(recettes, nbRecettes, "dessert", "pommes");
     fflush(stdout);
-    freopen("/dev/tty", "a", stdout);
     tempFile = fopen("test_output.txt", "r");
     CU_ASSERT_PTR_NOT_NULL_FATAL(tempFile);
 
