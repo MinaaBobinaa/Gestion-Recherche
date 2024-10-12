@@ -1,7 +1,5 @@
 # Gestion et de recherche de recettes
 
----
-
 ## Description du programme:
 Le programme est un système de gestion et de recherche de recettes conçu pour être
 utilisé via une interface en ligne de commande. Il est destiné à charger et à 
@@ -18,15 +16,6 @@ Le programme affichera toutes les recettes qui appartiennent à cette catégorie
 - La recherche par catégorie et mot-clé, où l'utilisateur spécifie une catégorie
 et un mot-clé. Le programme affiche les recettes qui appartiennent à la catégorie
 spécifiée et dont le nom contient le mot-clé.
-
-## Clone et création dépôt:
-
-Vous devez tout d'abord cloner ce dépôt dans un repertoire en suivant les 
-commandes suivantes:
-
-```bash
-$ git clone https://gitlab.info.uqam.ca/naas.yasmine/inf3135-hiver2024-tp3.git
-```
 
 Pour excecuter les tests unitaires (CUnits) vous devez entrer cette commande:
 
