@@ -1,10 +1,4 @@
-# Travail pratique 3
-
-## Identification
-
-- **Nom : Naas**
-- **Prénoms : Yasmine**
-- **Code permanent : NAAY87620206**
+# Gestion et de recherche de recettes
 
 ---
 
